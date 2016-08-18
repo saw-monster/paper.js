@@ -3,7 +3,12 @@
     <head>
         <script type="text/javascript" src="paper-full.js"></script>
         <script type="text/javascript" canvas="myCanvas">
+            var path = new Path();
+            path.strokeColor = 'black';
+            var start = new Point(100,100);
             
+            path.moveTo(start);
+            path.lineTo(start + [-50, 100]);
         </script>
     </head>
     <body>
