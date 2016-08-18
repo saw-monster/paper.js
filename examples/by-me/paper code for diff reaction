@@ -9,11 +9,11 @@ var A = [,];
 var B = [,];
 var pixels = [,];
 
-var D_A = 0;
-var D_B = 0;
-var k   = 0;
-var f   = 0;
-var dt  = 0;
+var D_A = 1;
+var D_B = 0.5;
+var k   = 0.102;
+var f   = 0.057;
+var dt  = 1.0;
 
 
 var dim = 60;
@@ -57,6 +57,16 @@ function calc(){
         for(var j=0; j < dim; j++){
             A[i,j] = A_t[i,j];
             B[i,j] = B_t[i,j];
+        }
+    }
+}
+
+function onFrame(event){
+    calc();
+    
+    for(var i=0; i < dim; i++){
+        for(var j=0; j < dim; j++){
+            pixels[i,j].fillColor = new Color(A[i,j]);
         }
     }
 }
