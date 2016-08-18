@@ -1,0 +1,62 @@
+var laplacian = [ [0.05, 0.2, 0.05],
+                    [0.2 , -1, 0.2],
+                    [0.05, 0.2, 0.05]];
+                    
+var h = view.size.height;
+var w = view.size.width;
+
+var A = [,];
+var B = [,];
+var pixels = [,];
+
+var D_A = 0;
+var D_B = 0;
+var k   = 0;
+var f   = 0;
+var dt  = 0;
+
+
+var dim = 60;
+
+project.currentStyle = {
+    fillColor: 'black'   
+}
+
+for(var i=0; i < dim; i++){
+    for(var j=0; j < dim; j++){
+        pixels[i,j] = new Path.Rectangle(i*12, j*12, 10 ,10);
+        A[i,j] = 1;
+        B[i,j] = 0;
+    }
+}
+
+function d_lap(arr,x,y){
+    var output = 0;
+    for(var i=-1; i<=1; i++){
+        var xi = (x==0 && i==-1) ? dim-1 : ((x==dim-1 && i==1) ? 0 : x+i);
+        for(var j=-1; j<=1; j++){
+            var yj = (y==0 && j==-1) ? dim-1 : ((y==dim-1 && j==1) ? 0 : y+j);
+            output += arr[xi,yj] * laplacian[i+1][j+1];
+        }
+    }
+    return output;
+}
+
+function calc(){
+    var A_t = [,];
+    var B_t = [,];
+    
+    for(var i=0; i < dim; i++){
+        for(var j=0; j < dim; j++){
+            A_t[i,j] = A[i,j] + (D_A * d_lap(A,i,j) - A[i,j] * B[i,j] * B[i,j] + f * (1-A[i,j])) * dt;
+            B_t[i,j] = B[i,j] + (D_B * d_lap(B,i,j) + A[i,j] * B[i,j] * B[i,j] - (k + f) * B[i,j]) * dt;
+        }
+    }
+    
+    for(var i=0; i < dim; i++){
+        for(var j=0; j < dim; j++){
+            A[i,j] = A_t[i,j];
+            B[i,j] = B_t[i,j];
+        }
+    }
+}
